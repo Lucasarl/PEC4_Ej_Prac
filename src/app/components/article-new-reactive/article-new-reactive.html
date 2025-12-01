@@ -1,4 +1,71 @@
 <div class="container">
-  <h2>Nuevo Artículo - Reactive Form</h2>
-  <p>Este componente se implementará en el Ejercicio 7</p>
+  <h2>Crear Nuevo Artículo (Reactivo)</h2>
+  <form [formGroup]="articleForm" (ngSubmit)="onSubmit()">
+    
+    <div class="form-group">
+      <label for="name">Nombre del artículo</label>
+      <input 
+        type="text" 
+        id="name" 
+        formControlName="name"
+        class="form-control"
+        placeholder="Introduce el nombre del artículo">
+      <div class="error-message" *ngIf="(name?.invalid && (name?.touched || submitted))">
+        <small *ngIf="name?.errors?.['required']">
+          El nombre del artículo es obligatorio
+        </small>
+        <small *ngIf="name?.errors?.['forbiddenName'] && !name?.errors?.['required']">
+          El nombre "{{ name?.errors?.['forbiddenName'].value }}" no está permitido (Prueba, Test, Mock, Fake)
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Precio del artículo</label>
+      <input 
+        type="number" 
+        id="price" 
+        formControlName="price"
+        class="form-control"
+        step="0.01"
+        placeholder="Introduce el precio">
+      <div class="error-message" *ngIf="(price?.invalid && (price?.touched || submitted))">
+        <small *ngIf="price?.errors?.['required']">
+          El precio del artículo es obligatorio
+        </small>
+        <small *ngIf="price?.errors?.['min'] && !price?.errors?.['required']">
+          El precio mínimo debe ser 0.10 €
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="imageUrl">URL de la imagen</label>
+      <input 
+        type="text" 
+        id="imageUrl" 
+        formControlName="imageUrl"
+        class="form-control"
+        placeholder="https://ejemplo.com/imagen.jpg">
+      <div class="error-message" *ngIf="(imageUrl?.invalid && (imageUrl?.touched || submitted))">
+        <small *ngIf="imageUrl?.errors?.['required']">
+          La URL de la imagen es obligatoria
+        </small>
+        <small *ngIf="imageUrl?.errors?.['pattern'] && !imageUrl?.errors?.['required']">
+          La URL de la imagen no parece ser válida
+        </small>
+      </div>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label>
+        <input 
+          type="checkbox" 
+          formControlName="isOnSale">
+        En venta
+      </label>
+    </div>
+
+    <button type="submit" class="btn-submit" [disabled]="submitted && articleForm.invalid">Crear</button>
+  </form>
 </div>
