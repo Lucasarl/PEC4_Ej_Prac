@@ -1,0 +1,28 @@
+<div class="article-card" [class.on-sale]="article().isOnSale">
+  <div class="article-image">
+    <img [src]="article().imageUrl" [alt]="article().name" />
+    @if (article().isOnSale) {
+      <span class="sale-badge">ON SALE!</span>
+    }
+  </div>
+  
+  <div class="article-info">
+    <h2 class="article-name">{{ article().name }}</h2>
+    <p class="article-price">€{{ article().price.toFixed(2) }}</p>
+    
+    <div class="quantity-controls">
+      <button 
+        class="btn btn-decrement" 
+        (click)="decrementQuantity()"
+        [disabled]="isDecrementDisabled()">
+        -
+      </button>
+      <span class="quantity">{{ article().quantityInCart }}</span>
+      <button 
+        class="btn btn-increment" 
+        (click)="incrementQuantity()">
+        +
+      </button>
+    </div>
+  </div>
+</div>

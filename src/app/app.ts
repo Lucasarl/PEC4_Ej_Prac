@@ -1,8 +1,9 @@
 import { Component, signal } from '@angular/core';
+import { ArticleItem } from './components/article-item/article-item';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [ArticleItem],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
