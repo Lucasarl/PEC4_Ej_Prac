@@ -1,6 +1,7 @@
-import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Article } from '../../models/article.interface';
+import { ArticleQuantityChange } from '../../models/article-quantity-change.interface';
 
 @Component({
   selector: 'app-article-item',
@@ -10,27 +11,22 @@ import { Article } from '../../models/article.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleItem {
-  article = signal<Article>({
-    name: 'Mechanical Keyboard RGB Pro',
-    imageUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400',
-    price: 129.99,
-    isOnSale: true,
-    quantityInCart: 0
-  });
-
-  isDecrementDisabled = computed(() => this.article().quantityInCart === 0);
+  article = input.required<Article>();
+  quantityChange = output<ArticleQuantityChange>();
 
   incrementQuantity(): void {
-    this.article.update(article => ({
-      ...article,
-      quantityInCart: article.quantityInCart + 1
-    }));
+    this.quantityChange.emit({
+      article: this.article(),
+      quantity: this.article().quantityInCart + 1
+    });
   }
 
   decrementQuantity(): void {
-    this.article.update(article => ({
-      ...article,
-      quantityInCart: Math.max(0, article.quantityInCart - 1)
-    }));
+    if (this.article().quantityInCart > 0) {
+      this.quantityChange.emit({
+        article: this.article(),
+        quantity: this.article().quantityInCart - 1
+      });
+    }
   }
 }

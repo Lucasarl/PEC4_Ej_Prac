@@ -15,7 +15,7 @@
       <button 
         class="btn btn-decrement" 
         (click)="decrementQuantity()"
-        [disabled]="isDecrementDisabled()">
+        [disabled]="article().quantityInCart === 0">
         -
       </button>
       <span class="quantity">{{ article().quantityInCart }}</span>

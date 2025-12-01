@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { ArticleItem } from './components/article-item/article-item';
+import { ArticleList } from './components/article-list/article-list';
 
 @Component({
   selector: 'app-root',
-  imports: [ArticleItem],
+  imports: [ArticleList],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
