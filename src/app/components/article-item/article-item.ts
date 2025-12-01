@@ -1,9 +1,10 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { NgClass } from '@angular/common';
 import { Article } from '../../models/article.interface';
 
 @Component({
   selector: 'app-article-item',
-  imports: [],
+  imports: [NgClass],
   templateUrl: './article-item.html',
   styleUrl: './article-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

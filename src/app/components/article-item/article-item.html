@@ -8,9 +8,10 @@
   
   <div class="article-info">
     <h2 class="article-name">{{ article().name }}</h2>
-    <p class="article-price">€{{ article().price.toFixed(2) }}</p>
+    <p [ngClass]="{'article-price': true, 'price-unavailable': !article().isOnSale}">€{{ article().price.toFixed(2) }}</p>
     
-    <div class="quantity-controls">
+    @if (article().isOnSale) {
+      <div class="quantity-controls">
       <button 
         class="btn btn-decrement" 
         (click)="decrementQuantity()"
@@ -23,6 +24,7 @@
         (click)="incrementQuantity()">
         +
       </button>
-    </div>
+      </div>
+    }
   </div>
 </div>
