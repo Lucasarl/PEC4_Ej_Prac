@@ -2,8 +2,17 @@
   <header>
     <h1>{{ title() }}</h1>
   </header>
+  <app-navbar (viewChange)="onViewChange($event)"></app-navbar>
   <main>
-    <app-article-list></app-article-list>
+    @if (currentView() === 'home' || currentView() === 'articles') {
+      <app-article-list></app-article-list>
+    }
+    @if (currentView() === 'new-template') {
+      <app-article-new-template></app-article-new-template>
+    }
+    @if (currentView() === 'new-reactive') {
+      <app-article-new-reactive></app-article-new-reactive>
+    }
   </main>
 </div>
 
