@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NameArticleValidator } from '../../validators/name-article.validator';
+import { ArticleService } from '../../services/article-service';
+import { Article } from '../../models/article.interface';
 
 @Component({
   selector: 'app-article-new-reactive',
@@ -13,7 +15,7 @@ export class ArticleNewReactive {
   articleForm: FormGroup;
   submitted = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private articleService: ArticleService) {
     this.articleForm = this.fb.group({
       name: ['', [Validators.required, NameArticleValidator()]],
       price: [0, [Validators.required, Validators.min(0.1)]],
@@ -25,9 +27,25 @@ export class ArticleNewReactive {
   onSubmit(): void {
     this.submitted = true;
     if (this.articleForm.valid) {
-      console.log('Formulario válido - Datos del artículo:', this.articleForm.value);
-      this.articleForm.reset({ name: '', price: 0, imageUrl: '', isOnSale: false });
-      this.submitted = false;
+      const newArticle: Article = {
+        id: 0, // El servicio asignará el ID
+        name: this.articleForm.value.name,
+        price: this.articleForm.value.price,
+        imageUrl: this.articleForm.value.imageUrl,
+        isOnSale: this.articleForm.value.isOnSale,
+        quantityInCart: 0
+      };
+      
+      this.articleService.create(newArticle).subscribe({
+        next: () => {
+          console.log('Artículo creado exitosamente');
+          this.articleForm.reset({ name: '', price: 0, imageUrl: '', isOnSale: false });
+          this.submitted = false;
+        },
+        error: (error) => {
+          console.error('Error al crear artículo:', error);
+        }
+      });
     } else {
       console.log('Formulario inválido');
     }

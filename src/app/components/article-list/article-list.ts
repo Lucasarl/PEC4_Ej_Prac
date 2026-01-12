@@ -1,14 +1,27 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ArticleItem } from '../article-item/article-item';
 import { Article } from '../../models/article.interface';
 import { ArticleQuantityChange } from '../../models/article-quantity-change.interface';
+import { ArticleService } from '../../services/article-service';
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { switchMap, startWith, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-article-list',
-  imports: [ArticleItem],
+  imports: [ArticleItem, CommonModule, FormsModule],
   template: `
+    <div class="search-container">
+      <input 
+        type="text" 
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Buscar artículos por nombre..."
+        class="search-input">
+    </div>
     <div class="article-list">
-      @for (article of articles(); track article.id) {
+      @for (article of (articles$ | async) ?? []; track article.id) {
         <app-article-item 
           [article]="article" 
           (quantityChange)="onQuantityChange($event)">
@@ -17,6 +30,27 @@ import { ArticleQuantityChange } from '../../models/article-quantity-change.inte
     </div>
   `,
   styles: `
+    .search-container {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
     .article-list {
       display: flex;
       gap: 2rem;
@@ -26,41 +60,38 @@ import { ArticleQuantityChange } from '../../models/article-quantity-change.inte
     }
   `,
 })
-export class ArticleList {
-  articles = signal<Article[]>([
-    {
-      id: 1,
-      name: 'Wireless Gaming Mouse',
-      imageUrl: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400',
-      price: 79.99,
-      isOnSale: true,
-      quantityInCart: 0
-    },
-    {
-      id: 2,
-      name: 'USB-C Hub Adapter',
-      imageUrl: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?w=400',
-      price: 49.99,
-      isOnSale: true,
-      quantityInCart: 0
-    },
-    {
-      id: 3,
-      name: 'Noise Cancelling Headphones',
-      imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400',
-      price: 199.99,
-      isOnSale: false,
-      quantityInCart: 0
-    }
-  ]);
+export class ArticleList implements OnInit {
+  articles$: Observable<Article[]>;
+  searchQuery = '';
+  private searchSubject = new BehaviorSubject<string>('');
+
+  constructor(private articleService: ArticleService) {
+    this.articles$ = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(query => this.articleService.getArticles(query || undefined))
+    );
+  }
+
+  ngOnInit(): void {
+    // Cargar artículos iniciales
+    this.searchSubject.next('');
+  }
+
+  onSearchChange(query: string): void {
+    this.searchSubject.next(query);
+  }
 
   onQuantityChange(change: ArticleQuantityChange): void {
-    this.articles.update(articles => 
-      articles.map(article => 
-        article.id === change.article.id 
-          ? { ...article, quantityInCart: change.quantity }
-          : article
-      )
-    );
+    const quantityDifference = change.quantity - change.article.quantityInCart;
+    this.articleService.changeQuantity(change.article.id, quantityDifference).subscribe({
+      next: () => {
+        // Recargar la lista para obtener datos actualizados del servidor
+        this.searchSubject.next(this.searchQuery);
+      },
+      error: (error) => {
+        console.error('Error changing quantity:', error);
+      }
+    });
   }
 }
