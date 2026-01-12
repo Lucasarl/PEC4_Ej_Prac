@@ -1,6 +1,6 @@
 <div class="article-card" [class.on-sale]="article().isOnSale">
   <div class="article-image">
-    <img [src]="article().imageUrl" [alt]="article().name" />
+    <img [src]="article().imageUrl | defaultImage" [alt]="article().name" />
     @if (article().isOnSale) {
       <span class="sale-badge">ON SALE!</span>
     }
@@ -8,7 +8,9 @@
   
   <div class="article-info">
     <h2 class="article-name">{{ article().name }}</h2>
-    <p [ngClass]="{'article-price': true, 'price-unavailable': !article().isOnSale}">€{{ article().price.toFixed(2) }}</p>
+    <p class="article-price" [ngClass]="{'price-unavailable': !article().isOnSale}">
+      {{ article().price | currency:'EUR':'symbol':'1.2-2' }}
+    </p>
     
     @if (article().isOnSale) {
       <div class="quantity-controls">

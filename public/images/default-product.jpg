@@ -1,0 +1,4 @@
+# This is a placeholder for default-product.jpg
+# In a real application, you would place the actual default image file here.
+# This image will be shown when an article doesn't have an imageUrl or has an empty string.
+# Path: /public/images/default-product.jpg

@@ -1,20 +1,22 @@
-import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, input, output } from '@angular/core';
+import { NgClass, CurrencyPipe } from '@angular/common';
 import { Article } from '../../models/article.interface';
 import { ArticleQuantityChange } from '../../models/article-quantity-change.interface';
+import { DefaultImagePipe } from '../../pipes/default-image.pipe';
 
 @Component({
   selector: 'app-article-item',
-  imports: [NgClass],
+  imports: [NgClass, CurrencyPipe, DefaultImagePipe],
   templateUrl: './article-item.html',
   styleUrl: './article-item.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // Removed OnPush for better reactivity with server updates
 })
 export class ArticleItem {
   article = input.required<Article>();
   quantityChange = output<ArticleQuantityChange>();
 
   incrementQuantity(): void {
+    console.log('Increment clicked for:', this.article().name, 'Current:', this.article().quantityInCart);
     this.quantityChange.emit({
       article: this.article(),
       quantity: this.article().quantityInCart + 1
@@ -22,6 +24,7 @@ export class ArticleItem {
   }
 
   decrementQuantity(): void {
+    console.log('Decrement clicked for:', this.article().name, 'Current:', this.article().quantityInCart);
     if (this.article().quantityInCart > 0) {
       this.quantityChange.emit({
         article: this.article(),
