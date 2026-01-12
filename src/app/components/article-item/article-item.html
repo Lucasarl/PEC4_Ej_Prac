@@ -1,9 +1,12 @@
 <div class="article-card" [class.on-sale]="article().isOnSale">
-  <div class="article-image">
+  <div class="article-image clickable" (click)="viewDetails()">
     <img [src]="article().imageUrl | defaultImage" [alt]="article().name" />
     @if (article().isOnSale) {
       <span class="sale-badge">ON SALE!</span>
     }
+    <div class="image-overlay">
+      <span class="view-details">👁️ View Details</span>
+    </div>
   </div>
   
   <div class="article-info">

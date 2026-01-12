@@ -1,16 +1,41 @@
 <nav class="navbar">
+  <div class="navbar-brand">
+    <h1>🛒 Ecommerce</h1>
+  </div>
+  
   <ul class="nav-menu">
+    <!-- Links de autenticación (solo si no está autenticado) -->
+    @if (!(isAuthenticated$ | async)) {
+      <li class="nav-item">
+        <a routerLink="/login" routerLinkActive="active" class="nav-link">Login</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/register" routerLinkActive="active" class="nav-link">Register</a>
+      </li>
+    }
+
+    <!-- Links principales (siempre visibles) -->
     <li class="nav-item">
-      <a (click)="navigateTo('home')" class="nav-link">Inicio</a>
+      <a routerLink="/article/list" routerLinkActive="active" class="nav-link">Articles List</a>
     </li>
-    <li class="nav-item">
-      <a (click)="navigateTo('articles')" class="nav-link">Artículos</a>
-    </li>
-    <li class="nav-item">
-      <a (click)="navigateTo('new-template')" class="nav-link">Nuevo artículo template</a>
-    </li>
-    <li class="nav-item">
-      <a (click)="navigateTo('new-reactive')" class="nav-link">Nuevo artículo reactivo</a>
-    </li>
+
+    <!-- Links protegidos (solo si está autenticado) -->
+    @if (isAuthenticated$ | async) {
+      <li class="nav-item">
+        <a routerLink="/article/create" routerLinkActive="active" class="nav-link">Create Article</a>
+      </li>
+    }
   </ul>
+
+  <!-- Información de usuario y logout -->
+  @if (isAuthenticated$ | async) {
+    <div class="user-info">
+      <span class="welcome-text">
+        Welcome, <strong>{{ (currentUser$ | async)?.username }}</strong>!
+      </span>
+      <button (click)="logout()" class="logout-btn">
+        Logout
+      </button>
+    </div>
+  }
 </nav>

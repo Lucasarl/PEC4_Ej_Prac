@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { NgClass, CurrencyPipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { Article } from '../../models/article.interface';
 import { ArticleQuantityChange } from '../../models/article-quantity-change.interface';
 import { DefaultImagePipe } from '../../pipes/default-image.pipe';
@@ -14,6 +15,12 @@ import { DefaultImagePipe } from '../../pipes/default-image.pipe';
 export class ArticleItem {
   article = input.required<Article>();
   quantityChange = output<ArticleQuantityChange>();
+
+  constructor(private router: Router) {}
+
+  viewDetails(): void {
+    this.router.navigate(['/article', this.article().id]);
+  }
 
   incrementQuantity(): void {
     console.log('Increment clicked for:', this.article().name, 'Current:', this.article().quantityInCart);

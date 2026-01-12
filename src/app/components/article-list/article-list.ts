@@ -101,7 +101,7 @@ export class ArticleList implements OnInit {
   onQuantityChange(change: ArticleQuantityChange): void {
     console.log('Quantity change received:', change);
     
-    // 1. Actualizar inmediatamente en la vista local (optimistic update)
+    // 1. Actualizar inmediatamente en la vista local 
     const currentArticles = this.localArticles.getValue();
     const updatedArticles = currentArticles.map(article => 
       article.id === change.article.id 

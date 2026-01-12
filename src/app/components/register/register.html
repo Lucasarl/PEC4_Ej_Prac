@@ -1,0 +1,78 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input 
+          id="username"
+          type="text" 
+          formControlName="username"
+          [class.error]="username?.invalid && username?.touched"
+          placeholder="Enter your username"
+        >
+        @if (username?.invalid && username?.touched) {
+          <div class="error-message">
+            @if (username?.errors?.['required']) {
+              <span>Username is required</span>
+            }
+            @if (username?.errors?.['minlength']) {
+              <span>Username must be at least 3 characters</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmUsername">Confirm Username:</label>
+        <input 
+          id="confirmUsername"
+          type="text" 
+          formControlName="confirmUsername"
+          [class.error]="confirmUsername?.invalid && confirmUsername?.touched"
+          placeholder="Confirm your username"
+        >
+        @if (confirmUsername?.invalid && confirmUsername?.touched) {
+          <div class="error-message">
+            @if (confirmUsername?.errors?.['required']) {
+              <span>Please confirm your username</span>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="info-message">
+        <i>📌 Your password will be set to "SECRET" by default</i>
+      </div>
+
+      @if (registerError) {
+        <div class="error-message global-error">
+          {{ registerError }}
+        </div>
+      }
+
+      @if (registerSuccess) {
+        <div class="success-message">
+          {{ registerSuccess }}
+        </div>
+      }
+
+      <button 
+        type="submit" 
+        [disabled]="registerForm.invalid || isLoading"
+        class="register-btn"
+      >
+        @if (isLoading) {
+          <span>Registering...</span>
+        } @else {
+          <span>Register</span>
+        }
+      </button>
+    </form>
+    
+    <p class="login-link">
+      Already have an account? 
+      <a routerLink="/login">Login here</a>
+    </p>
+  </div>
+</div>

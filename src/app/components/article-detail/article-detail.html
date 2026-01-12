@@ -1,0 +1,98 @@
+<div class="article-detail-container">
+  @if (isLoading) {
+    <div class="loading">
+      <h2>Loading article details...</h2>
+    </div>
+  } @else if (error) {
+    <div class="error">
+      <h2>{{ error }}</h2>
+      <div class="error-actions">
+        <button (click)="retryLoad()" class="btn btn-primary">
+          🔄 Retry
+        </button>
+        <button (click)="goBack()" class="btn btn-secondary">
+          ← Back to Articles
+        </button>
+      </div>
+    </div>
+  } @else if (article) {
+    <div class="article-detail">
+      <div class="article-header">
+        <button (click)="goBack()" class="back-btn">
+          ← Back to Articles
+        </button>
+        <h1>{{ article.name }}</h1>
+      </div>
+
+      <div class="article-content">
+        <div class="article-image">
+          <img 
+            [src]="article.imageUrl | defaultImage" 
+            [alt]="article.name"
+            class="main-image"
+          />
+          @if (article.isOnSale) {
+            <div class="sale-badge">On Sale!</div>
+          }
+        </div>
+
+        <div class="article-info">
+          <div class="price-section">
+            <h2 class="price">{{ article.price | currency:'EUR':'symbol':'1.2-2' }}</h2>
+            @if (article.isOnSale) {
+              <span class="sale-indicator">🔥 Special Offer</span>
+            }
+          </div>
+
+          <div class="quantity-section">
+            <h3>Quantity in Cart</h3>
+            <div class="quantity-controls">
+              <button 
+                (click)="decreaseQuantity()" 
+                [disabled]="article.quantityInCart === 0"
+                class="quantity-btn decrease"
+              >
+                −
+              </button>
+              <span class="quantity-display">{{ article.quantityInCart }}</span>
+              <button 
+                (click)="increaseQuantity()"
+                class="quantity-btn increase"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div class="article-details">
+            <h3>Article Details</h3>
+            <div class="detail-item">
+              <strong>ID:</strong> {{ article.id }}
+            </div>
+            <div class="detail-item">
+              <strong>Status:</strong> 
+              @if (article.isOnSale) {
+                <span class="status on-sale">On Sale</span>
+              } @else {
+                <span class="status regular">Regular Price</span>
+              }
+            </div>
+            <div class="detail-item">
+              <strong>Cart Total:</strong> {{ article.quantityInCart }}
+            </div>
+          </div>
+
+          @if (article.quantityInCart > 0) {
+            <div class="cart-summary">
+              <h3>Cart Summary</h3>
+              <div class="summary-item">
+                <span>{{ article.quantityInCart }} × {{ article.price | currency:'EUR':'symbol':'1.2-2' }}</span>
+                <strong>{{ (article.quantityInCart * article.price) | currency:'EUR':'symbol':'1.2-2' }}</strong>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
