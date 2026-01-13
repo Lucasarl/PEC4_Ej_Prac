@@ -1,28 +1,25 @@
 import { Routes } from '@angular/router';
-import { Login } from './components/login/login';
-import { Register } from './components/register/register';
-import { ArticleList } from './components/article-list/article-list';
-import { ArticleNewReactive } from './components/article-new-reactive/article-new-reactive';
-import { ArticleDetail } from './components/article-detail/article-detail';
-import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   // Ruta por defecto redirige a login
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/user/login', pathMatch: 'full' },
   
-  // Rutas de autenticación
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
-  
-  // Rutas de artículos
-  { path: 'article/list', component: ArticleList },
+  // Lazy loading para el módulo User
   { 
-    path: 'article/create', 
-    component: ArticleNewReactive,
-    canActivate: [AuthGuard] // Ruta protegida
+    path: 'user',
+    loadChildren: () => import('./features/user/user.module').then(m => m.UserModule)
   },
-  { path: 'article/:id', component: ArticleDetail },
+  
+  // Lazy loading para el módulo Article
+  { 
+    path: 'article',
+    loadChildren: () => import('./features/article/article.module').then(m => m.ArticleModule)
+  },
+  
+  // Backwards compatibility routes (redirect to new structure)
+  { path: 'login', redirectTo: '/user/login' },
+  { path: 'register', redirectTo: '/user/register' },
   
   // Ruta para casos no encontrados
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/user/login' }
 ];

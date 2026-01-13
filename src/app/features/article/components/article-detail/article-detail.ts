@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleService } from '../../services/article-service';
-import { Article } from '../../models/article.interface';
-import { DefaultImagePipe } from '../../pipes/default-image.pipe';
+import { Article } from '../../../../shared/models/article.interface';
+import { DefaultImagePipe } from '../../../../shared/pipes/default-image.pipe';
 import { Subscription } from 'rxjs';
 
 @Component({

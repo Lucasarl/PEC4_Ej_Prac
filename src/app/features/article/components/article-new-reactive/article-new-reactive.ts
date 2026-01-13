@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NameArticleValidator } from '../../validators/name-article.validator';
+import { NameArticleValidator } from '../../../../shared/validators/name-article.validator';
 import { ArticleService } from '../../services/article-service';
-import { Article } from '../../models/article.interface';
+import { Article } from '../../../../shared/models/article.interface';
 
 @Component({
   selector: 'app-article-new-reactive',

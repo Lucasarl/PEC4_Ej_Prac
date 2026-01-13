@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserStoreService } from '../services/user-store.service';
+import { UserStoreService } from '../features/user/services/user-store.service';
 
 @Injectable()
 export class ArticleAppInterceptor implements HttpInterceptor {

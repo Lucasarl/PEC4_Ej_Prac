@@ -1,9 +1,9 @@
 import { Component, input, output } from '@angular/core';
 import { NgClass, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { Article } from '../../models/article.interface';
-import { ArticleQuantityChange } from '../../models/article-quantity-change.interface';
-import { DefaultImagePipe } from '../../pipes/default-image.pipe';
+import { Article } from '../../../../shared/models/article.interface';
+import { ArticleQuantityChange } from '../../../../shared/models/article-quantity-change.interface';
+import { DefaultImagePipe } from '../../../../shared/pipes/default-image.pipe';
 
 @Component({
   selector: 'app-article-item',

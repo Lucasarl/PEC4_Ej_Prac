@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { UserStoreService, User } from '../../services/user-store.service';
+import { UserStoreService, User } from '../../features/user/services/user-store.service';
 import { Observable } from 'rxjs';
 
 @Component({

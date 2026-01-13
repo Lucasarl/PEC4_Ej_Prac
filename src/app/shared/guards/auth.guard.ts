@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UserStoreService } from '../services/user-store.service';
+import { UserStoreService } from '../../features/user/services/user-store.service';
 
 @Injectable({
   providedIn: 'root'
